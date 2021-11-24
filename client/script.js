@@ -2,6 +2,10 @@
 //THE TEST SERVER IS RUNNING ON LOCALHOST:3000//
 ////////////////////////////////////////////////
 
+
+
+
+
 // PROBLEM 1
 /*
     In the index.html file in this folder there is a button with an id of 'say-hello-button'!
@@ -10,6 +14,7 @@
 */
 
 // CODE HERE
+const sayHelloButton = document.querySelector('#say-hello-button')
 
 
 // PROBLEM 2
@@ -20,7 +25,10 @@
 */
 
 // CODE HERE
-
+sayHelloButton.addEventListener('mouseover', () =>{
+    sayHelloButton.style.backgroundColor ='black';
+    sayHelloButton.style.color = 'white';
+})
 
 // PROBLEM 3
 /*
@@ -32,7 +40,10 @@
 */
 
 // CODE HERE
-
+sayHelloButton.addEventListener('mouseout', () =>{
+    sayHelloButton.style.backgroundColor = '#EFEFEF'
+    sayHelloButton.style.color = 'black'
+})
 
 // PROBLEM 4
 /*
@@ -53,7 +64,7 @@ const sayHello = () => {
 // DO NOT EDIT FUNCTION
 
 // CODE HERE
-
+sayHelloButton.addEventListener('click', sayHello )
 
 // PROBLEM 5 
 /*
@@ -67,8 +78,18 @@ const sayHello = () => {
 */ 
 
 const ohMy = () => {
-    // YOUR CODE HERE
+    axios.get('http://localhost:3000/animals')
+    .then(response => {
+        for(i = 0; i < response.data.length; i++){
+            let p = document.createElement('p')
+            p.textContent = response.data[i]
+            const bodySelect = document.querySelector('body')
+            bodySelect.appendChild(p)
+        }
+    })
 }
+
+// On each iteration of the loop, create a new p element. Set its textContent equal the string at the current index (i) and then append the new p element onto the document's body
 
 document.getElementById('animals-button').addEventListener('click', ohMy)
 
@@ -87,8 +108,16 @@ document.getElementById('animals-button').addEventListener('click', ohMy)
 */
 
 const repeatMyParam = () => {
-    //YOUR CODE HERE
+    axios.get(`http://localhost:3000/repeat/Coding`)
+    .then(response =>{
+        console.log(response.data)
+        document.querySelector('#repeat-text').textContent = response.data
+
+    })
+
 }
+
+document.querySelector('#repeat-button').addEventListener('click', repeatMyParam)
 
 // PROBLEM 7
 /*
@@ -111,7 +140,12 @@ const repeatMyParam = () => {
 */
 
 // CODE HERE
+const newVar = () =>{
+    axios.get('http://localhost:3000/query-test?cats&dogs')
+    .then(({ data }) => console.log(data))
+}
 
+document.querySelector('#query-button').addEventListener('click', newVar)
 
 
 ////////////////
@@ -164,3 +198,41 @@ const repeatMyParam = () => {
 */
 
 // CODE HERE 
+
+
+
+
+
+
+
+function createFood(event){
+    event.preventDefault()
+
+    
+    const foodInput = document.querySelector('input')
+    
+    
+    const body = {
+        newFood: foodInput.value
+
+    }
+
+    axios.post('http://localhost:3000/food', body)
+    .then(response =>{
+        console.log(response.data)
+    
+    for(i = 0; i < response.data.length; i++){
+        let p = document.createElement('p')
+        p.textContent = response.data[i]
+        const bodySelect = document.querySelector('section')
+        bodySelect.appendChild(p)
+    }
+    
+    })
+
+    foodInput.value = ''
+}
+
+
+document.querySelector('form').addEventListener('submit',createFood)
+
